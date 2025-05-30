@@ -1,3 +1,35 @@
+-- 🔰 作者簽名畫面（會自動關閉）
+local gui = Instance.new("ScreenGui", game.CoreGui)
+gui.Name = "AuthorIntroGUI"
+
+-- 背景半透明黑色全螢幕
+local bg = Instance.new("Frame", gui)
+bg.Size = UDim2.new(1, 0, 1, 0)
+bg.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+bg.BackgroundTransparency = 0
+bg.ZIndex = 10
+
+-- 中間文字
+local text = Instance.new("TextLabel", bg)
+text.Size = UDim2.new(1, 0, 1, 0)
+text.Text = "✨腳本由 魚生 製作 "
+text.TextColor3 = Color3.new(1, 1, 1)
+text.TextStrokeTransparency = 0
+text.BackgroundTransparency = 1
+text.Font = Enum.Font.GothamBlack
+text.TextScaled = true
+text.ZIndex = 11
+
+-- 淡出動畫
+task.delay(3, function() -- 顯示 3 秒
+	for i = 0, 1, 0.05 do
+		bg.BackgroundTransparency = i
+		text.TextTransparency = i
+		text.TextStrokeTransparency = i
+		task.wait(0.05)
+	end
+	gui:Destroy()
+end)
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
