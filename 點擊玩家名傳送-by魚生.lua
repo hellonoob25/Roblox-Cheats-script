@@ -12,7 +12,7 @@ bg.ZIndex = 10
 -- 中間文字
 local text = Instance.new("TextLabel", bg)
 text.Size = UDim2.new(1, 0, 1, 0)
-text.Text = "✨腳本由 魚生 製作 "
+text.Text = "腳本由 魚生 製作 "
 text.TextColor3 = Color3.new(1, 1, 1)
 text.TextStrokeTransparency = 0
 text.BackgroundTransparency = 1
