@@ -1,6 +1,6 @@
--- Roblox GUI + 方塊控制腳本（修正版）
+-- Roblox GUI + 方塊控制腳本（只生成方塊，不傳送角色、不Weld到頭）
 
--- 防止重複載入 GUI（建議放在最前面）
+-- 防止重複載入 GUI
 pcall(function()
     local cg = game:GetService("CoreGui")
     if cg:FindFirstChild("GlowBoxController") then
@@ -20,7 +20,7 @@ local head = char:FindFirstChild("Head") or char:WaitForChild("Head")
 -- 建立 ScreenGui
 local gui = Instance.new("ScreenGui")
 gui.Name = "GlowBoxController"
-gui.ResetOnSpawn = false -- 重生時保留
+gui.ResetOnSpawn = false
 
 -- 建立主框
 local frame = Instance.new("Frame")
@@ -31,7 +31,7 @@ frame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 frame.Active = true
 frame.Parent = gui
 
--- 手動拖曳（避免 Draggable 不支援）
+-- 手動拖曳
 local dragging, dragInput, dragStart, startPos
 frame.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
@@ -77,26 +77,23 @@ minusBtn.Parent = frame
 -- 方塊列表
 local glowBoxes = {}
 
+-- 只生成方塊，不 Weld，不動玩家
 local function createGlowBox()
     local box = Instance.new("Part")
     box.Size = Vector3.new(2, 2, 2)
-    box.Anchored = false
+    box.Anchored = true      -- 錨定，不會物理影響玩家
     box.CanCollide = false
     box.Material = Enum.Material.Neon
     box.Color = Color3.fromRGB(255, 255, 0)
     box.Name = "GlowBox"
-    -- 製造光源
+    -- 光源
     local light = Instance.new("PointLight", box)
     light.Color = Color3.fromRGB(255, 255, 0)
     light.Brightness = 2
     light.Range = 8
-    -- weld 到頭上
-    local weld = Instance.new("WeldConstraint")
-    weld.Part0 = box
-    weld.Part1 = head
-    weld.Parent = box
-    box.Parent = head
-    box.CFrame = head.CFrame * CFrame.new(0, 2 + #glowBoxes * 2.2, 0)
+    -- 產生在頭頂上方，不會 Weld
+    box.CFrame = head.CFrame * CFrame.new(0, 4 + #glowBoxes * 2.2, 0)
+    box.Parent = workspace   -- 放到 workspace
     table.insert(glowBoxes, box)
 end
 
@@ -110,6 +107,6 @@ end
 plusBtn.MouseButton1Click:Connect(createGlowBox)
 minusBtn.MouseButton1Click:Connect(removeGlowBox)
 
--- 最後一步：加到 CoreGui
+-- 加到 CoreGui
 gui.Parent = game:GetService("CoreGui")
-print("GlowBox GUI 已加載")
+print("GlowBox GUI 已加載（修正版，只生成方塊不傳送）")
